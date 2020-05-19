@@ -5,13 +5,7 @@ import HomeStack from '../routes/homeStack';
 export default function Home({navigation}) {
     return (
         <View style={styles.container}>
-
             <HomeStack />
-
-            <View>
-                <Text>Home screen</Text>
-            </View>
-            
         </View>
     )
 }
