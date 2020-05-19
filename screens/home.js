@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import HomeStack from '../routes/homeStack';
 
 export default function Home({navigation}) {
     return (
         <View style={styles.container}>
+
+            <HomeStack />
 
             <View>
                 <Text>Home screen</Text>
