@@ -41,21 +41,37 @@ export default class Tracks extends Component {
         }));
     }
 
+    //Metho used to open modal, update state with song info by the ID which song was clikked
+    openModal = (songID) => {
+        this.setState({modalVisible: true})
+
+        for (const item of this.state.songs) {
+            if (item.id === songID) {
+                this.setState({songName: item.filename, songDuration: item.duration, songPath: item.uri})
+            }
+        }
+    }
 
     render() {
 
         return (
             <View style={styles.container}>
 
-                {/* Calling component which holds modal */}
-                <SongModal closeModal={this.closeModal} IsVisible={this.state.modalVisible} />
+                {/* Calling component which holds modal and passing props */}
+                <SongModal closeModal={this.closeModal} 
+                    IsVisible={this.state.modalVisible} 
+                    songs={this.state.songs}
+                    songName={this.state.songName}
+                    songDuration={this.state.songDuration}
+                    songPath={this.state.songPath}
+                />
 
                 {/* List with scrollbar that shows all audio files */}
                 <FlatList 
                     data={this.state.songs}
                     renderItem={({item}) => 
                         // Touchable item which toggles state and opens up modal
-                        <TouchableOpacity key={item.id} style={styles.songView} onPress={() => {this.setState({modalVisible: true})}}>
+                        <TouchableOpacity key={item.id} style={styles.songView} onPress={() => {this.openModal(item.id)}}>
                             <View style={styles.songText}>
                                 <Text style={{fontWeight: 'bold'}}>{item.filename.split(".")[0].split(" - ")[1]}</Text>
                                 <Text>{item.filename.split(".")[0].split(" - ")[0]}</Text>
