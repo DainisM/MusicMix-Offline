@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         flexDirection: 'row',
-        backgroundColor: '#a6fff0',
+        backgroundColor: '#a3fffb',
     },
     navLink: {
         flex: 1,

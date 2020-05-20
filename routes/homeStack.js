@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 
 export default function HomeStack() {
     return (
-            <Stack.Navigator initialRouteName='Tracks' screenOptions={{headerLeft: null, headerTintColor: '#444', headerStyle: { backgroundColor: '#a6fff0', height: 50}}}>
+            <Stack.Navigator initialRouteName='Tracks' screenOptions={{headerLeft: null, headerTintColor: '#444', headerStyle: { backgroundColor: '#a3fffb', height: 50}}}>
                 <Stack.Screen name="Tracks" component={Tracks} options={({navigation}) => { return ( { headerTitle: () => <HomeNavigation navigation={navigation}/>})}}/>
                 <Stack.Screen name="Playlists" component={Playlists} options={({navigation}) => { return ( { headerTitle: () => <HomeNavigation navigation={navigation}/>})}}/>
                 <Stack.Screen name="Artists" component={Artists} options={({navigation}) => { return ( { headerTitle: () => <HomeNavigation navigation={navigation}/>})}}/>
