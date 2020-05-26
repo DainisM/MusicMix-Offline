@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, Image, Modal } from 'react-native';
+import { Dimensions, View, Text, StyleSheet, Image, Modal, TouchableHighlight } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import Slider from 'react-native-slider';
+import { Audio } from 'expo-av';
 
 export default class Tracks extends Component {
     constructor(props) {
