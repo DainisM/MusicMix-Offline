@@ -29,8 +29,6 @@ export default class Tracks extends Component {
 			isBuffering: false,
 			isLoading: true,
 			volume: 1.0,
-			rate: 1.0,
-			portrait: null,
         }
 
         this.closeModal = this.closeModal.bind(this);
@@ -59,7 +57,7 @@ export default class Tracks extends Component {
     }
 
     //Method used to load an audio file
-    async _loadNewPlaybackInstance(playing) {
+    async loadNewPlaybackInstance(playing) {
 		if (this.playbackInstance != null) {
 			await this.playbackInstance.unloadAsync();
 			this.playbackInstance.setOnPlaybackStatusUpdate(null);
@@ -76,15 +74,15 @@ export default class Tracks extends Component {
 		const { sound, status } = await Audio.Sound.createAsync(
 			source,
 			initialStatus,
-			this._onPlaybackStatusUpdate
+			this.onPlaybackStatusUpdate
 		);
 		this.playbackInstance = sound;
 
-		this._updateScreenForLoading(false);
+		this.updateScreenForLoading(false);
     }
     
     //Method used when making screen ready to play sound
-    _updateScreenForLoading(isLoading) {
+    updateScreenForLoading(isLoading) {
 		if (isLoading) {
 			this.setState({
 				isPlaying: false,
@@ -102,7 +100,7 @@ export default class Tracks extends Component {
 	}
 
     //Method used to manipulate audio when it is playing
-    _onPlaybackStatusUpdate = status => {
+    onPlaybackStatusUpdate = status => {
 		if (status.isLoaded) {
 			this.setState({
 				playbackInstancePosition: status.positionMillis,
@@ -114,8 +112,8 @@ export default class Tracks extends Component {
             });
             //When song finishes it jumps to next song in playlist array
 			if (status.didJustFinish) {
-				this._advanceIndex(true);
-				this._updatePlaybackInstanceForIndex(true);
+				this.advanceIndex(true);
+				this.updatePlaybackInstanceForIndex(true);
 			}
 		} else {
 			if (status.error) {
@@ -125,21 +123,21 @@ export default class Tracks extends Component {
     };
     
     //Method to jump o next song using indexes in array
-    _advanceIndex(forward) {
+    advanceIndex(forward) {
 		this.index =
 			(this.index + (forward ? 1 : this.state.songs.length - 1)) %
 			this.state.songs.length;
 	}
 
     //Calling methods or updating screen data and loading new song in PlaybackInstance
-    async _updatePlaybackInstanceForIndex(playing) {
-		this._updateScreenForLoading(true);
+    async updatePlaybackInstanceForIndex(playing) {
+		this.updateScreenForLoading(true);
 
-		this._loadNewPlaybackInstance(playing);
+		this.loadNewPlaybackInstance(playing);
     }
     
     //Method used to toggle between playing song or pausing
-    _onPlayPausePressed = () => {
+    onPlayPausePressed = () => {
 		if (this.playbackInstance != null) {
 			if (this.state.isPlaying) {
 				this.playbackInstance.pauseAsync();
@@ -150,23 +148,23 @@ export default class Tracks extends Component {
     };
 
     //Method used to go to next song in array
-	_onForwardPressed = () => {
+	onForwardPressed = () => {
 		if (this.playbackInstance != null) {
-			this._advanceIndex(true);
-			this._updatePlaybackInstanceForIndex(this.state.shouldPlay);
+			this.advanceIndex(true);
+			this.updatePlaybackInstanceForIndex(this.state.shouldPlay);
 		}
 	};
 
     //Method used to go back to previous song in array
-	_onBackPressed = () => {
+	onBackPressed = () => {
 		if (this.playbackInstance != null) {
-			this._advanceIndex(false);
-			this._updatePlaybackInstanceForIndex(this.state.shouldPlay);
+			this.advanceIndex(false);
+			this.updatePlaybackInstanceForIndex(this.state.shouldPlay);
 		}
 	};
 
     //Method used to pause sound and find value on slider when using slider
-	_onSeekSliderValueChange = async value => {
+	onSeekSliderValueChange = async value => {
 		if (this.playbackInstance != null && !this.isSeeking) {
 			this.isSeeking = true;
 			this.shouldPlayAtEndOfSeek = this.state.shouldPlay;
@@ -175,7 +173,7 @@ export default class Tracks extends Component {
 	};
 
     //Method used to start song from position(value) from slider
-	_onSeekSliderSlidingComplete = async value => {
+	onSeekSliderSlidingComplete = async value => {
 		if (this.playbackInstance != null) {
 			this.isSeeking = false;
 			const seekPosition = value * this.state.playbackInstanceDuration;
@@ -188,7 +186,7 @@ export default class Tracks extends Component {
 	};
 
     //Method used to find adn set slider positino
-	_getSeekSliderPosition() {
+	getSeekSliderPosition() {
 		if (
 			this.playbackInstance != null &&
 			this.state.playbackInstancePosition != null &&
@@ -203,7 +201,7 @@ export default class Tracks extends Component {
     }
     
     //Method used to get milliseconds of audio file and show then as minutes:seconds
-    _getMMSSFromMillis(millis) {
+    getMMSSFromMillis(millis) {
 		const totalSeconds = millis / 1000;
 		const seconds = Math.floor(totalSeconds % 60);
 		const minutes = Math.floor(totalSeconds / 60);
@@ -219,13 +217,13 @@ export default class Tracks extends Component {
 	}
 
     //Method used to show sound current play time
-	_getTimestamp() {
+	getTimestamp() {
 		if (
 			this.playbackInstance != null &&
 			this.state.playbackInstancePosition != null &&
 			this.state.playbackInstanceDuration != null
 		) {
-			return `${this._getMMSSFromMillis(
+			return `${this.getMMSSFromMillis(
 				this.state.playbackInstancePosition
 			)}`;
 		}
@@ -233,13 +231,13 @@ export default class Tracks extends Component {
     }
   
     //Method used to get audio full duration 
-    _getDuration() {
+    getDuration() {
     if (
 			this.playbackInstance != null &&
 			this.state.playbackInstancePosition != null &&
 			this.state.playbackInstanceDuration != null
 		) {
-			return `${this._getMMSSFromMillis(
+			return `${this.getMMSSFromMillis(
 				this.state.playbackInstanceDuration
 			)}`;
 		}
@@ -257,7 +255,7 @@ export default class Tracks extends Component {
     //Metho used to open modal, update state with song info by the ID which song was clikked
     openModal = (songID) => {
 
-        this._loadNewPlaybackInstance(false)
+        this.loadNewPlaybackInstance(false)
         
         this.setState({modalVisible: true})
 
@@ -281,18 +279,18 @@ export default class Tracks extends Component {
                     IsVisible={this.state.modalVisible} 
                     songs={this.state.songs}
                     songID={this.state.songID}
-                    playbackInstanceName={this.state.playbackInstanceName.split('.')[0]}
+                    playbackInstanceName={this.state.playbackInstanceName}
                     isLoading={this.state.isLoading}
                     isBuffering={this.state.isBuffering}
                     isPlaying={this.state.isPlaying}
-                    getTimestamp={this._getTimestamp()}
-                    getSeekSliderPosition={this._getSeekSliderPosition()}
-                    onSeekSliderValueChange={this._onSeekSliderValueChange}
-                    onSeekSliderSlidingComplete={this._onSeekSliderSlidingComplete}
-                    getDuration={this._getDuration()}
-                    onBackPressed={this._onBackPressed}
-                    onPlayPausePressed={this._onPlayPausePressed}
-                    onForwardPressed={this._onForwardPressed}
+                    getTimestamp={this.getTimestamp()}
+                    getSeekSliderPosition={this.getSeekSliderPosition()}
+                    onSeekSliderValueChange={this.onSeekSliderValueChange}
+                    onSeekSliderSlidingComplete={this.onSeekSliderSlidingComplete}
+                    getDuration={this.getDuration()}
+                    onBackPressed={this.onBackPressed}
+                    onPlayPausePressed={this.onPlayPausePressed}
+                    onForwardPressed={this.onForwardPressed}
                 />
 
                 {/* List with scrollbar that shows all audio files */}

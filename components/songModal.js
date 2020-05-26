@@ -27,12 +27,21 @@ export default class Tracks extends Component {
                 >
                     <View style={styles.container}>
 
-                        {/* Back icon to close modal onPress */}
-                        <MaterialIcons 
-                            name="reply"
-                            size={34}
-                            onPress={this.props.closeModal}
-                        />
+                        <View style={styles.modalControls}>
+                            {/* Back icon to close modal onPress */}
+                            <MaterialIcons 
+                                name="reply"
+                                size={34}
+                                onPress={this.props.closeModal}
+                            />
+
+                            <MaterialIcons 
+                                name="playlist-add"
+                                size={34}
+                                
+                            />
+                        </View>
+
                         
                         {/* View which holds image */}
                         <View>
@@ -42,7 +51,7 @@ export default class Tracks extends Component {
                         {/* View which holds text with audio full name passed by props */}
                         <View style={styles.detailsContainer}>
 					        <Text style={styles.text}>
-						        {this.props.playbackInstanceName}
+						        {this.props.playbackInstanceName.split('.')[0]}
 					        </Text>
 				        </View>
 				
@@ -164,15 +173,20 @@ export default class Tracks extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'column',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		alignSelf: 'stretch',
         backgroundColor: BACKGROUND_COLOR,
         height: '100%'
     },
+    modalControls: {
+        justifyContent: 'space-between',
+		alignSelf: 'stretch',
+        flexDirection: 'row',
+        margin: 20,
+        maxHeight: '5%',
+    },
     modalImage: {
-        marginTop: 30,
         alignSelf: 'center',
         height: DEVICE_HEIGHT / 1.8,
         width: DEVICE_WIDTH / 1.2,
