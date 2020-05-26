@@ -2,15 +2,31 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 
 export default class Playlists extends React.Component {
+    constructor() {
+        super()
+
+        this.state= {
+            allPlaylists: [],
+        }
+    }
 
     async componentDidMount() {
-        const allPlaylists = await AsyncStorage.getItem('playlists');
-
-            console.log(allPlaylists);
+        const Playlists = await AsyncStorage.getItem('playlists');
+        await this.setState({allPlaylists: JSON.parse(Playlists)});
     }
 
     createPlaylist = async () => {
-        await AsyncStorage.setItem('playlists', 'PlaylistName')
+        const playlistsToSave = { 'name': 'More Music'}
+        const existingProducts = await AsyncStorage.getItem('playlists')
+
+        let newPlaylists = JSON.parse(existingProducts);
+        if( !newPlaylists ){
+            newPlaylists = []
+        }
+
+        newPlaylists.push( playlistsToSave )
+
+        await AsyncStorage.setItem('playlists', JSON.stringify(newPlaylists))
             .then(() => {
                 this.props.navigation.replace('Playlists');
             })
@@ -30,6 +46,13 @@ export default class Playlists extends React.Component {
                 </View>
     
                 <Text>Playlists screen</Text>
+
+                <View>
+                    {this.state.allPlaylists.map(item => {
+                        return <Text>{item.name}</Text>
+                    })}
+                </View>
+
             </View>
         )
     }
