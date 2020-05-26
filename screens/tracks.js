@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as Permissions from 'expo-permissions';
+import { Audio } from 'expo-av';
 
 import SongModal from '../components/songModal';
 
@@ -13,9 +14,9 @@ export default class Tracks extends Component {
             songs: [],
             modalVisible: false,
             songID: "",
-            songName: "",
-            songDuration: null,
-            songPath: "",
+            // songName: "",
+            // songDuration: null,
+            // songPath: "",
         }
 
         this.closeModal = this.closeModal.bind(this);
@@ -31,7 +32,7 @@ export default class Tracks extends Component {
             mediaType: MediaLibrary.MediaType.audio,
         })
         //Sets found audio files in state in array
-        this.setState({songs: media.assets});
+        await this.setState({songs: media.assets});
     }
 
     //Method used by child component to toggle state and close modal
@@ -47,7 +48,7 @@ export default class Tracks extends Component {
 
         for (const item of this.state.songs) {
             if (item.id === songID) {
-                this.setState({songName: item.filename, songDuration: item.duration, songPath: item.uri})
+                this.setState({songName: item.filename, songDuration: item.duration, songPath: item.uri, songID: item.id})
             }
         }
     }
@@ -61,9 +62,10 @@ export default class Tracks extends Component {
                 <SongModal closeModal={this.closeModal} 
                     IsVisible={this.state.modalVisible} 
                     songs={this.state.songs}
-                    songName={this.state.songName}
-                    songDuration={this.state.songDuration}
-                    songPath={this.state.songPath}
+                    songID={this.state.songID}
+                    // songName={this.state.songName}
+                    // songDuration={this.state.songDuration}
+                    // songPath={this.state.songPath}
                 />
 
                 {/* List with scrollbar that shows all audio files */}

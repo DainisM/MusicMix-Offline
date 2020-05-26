@@ -30,13 +30,11 @@ export default class Tracks extends Component {
                         
                         <View>
                             <Image style={styles.modalImage} source={require('../assets/Music.png')}/>
-                            <Text style={styles.modalSongName}>{this.props.songName.split(".")[0]}</Text>
+                            <Text style={styles.modalSongName}>Song name</Text>
                         </View>
 
                         <View>
-                            
-                            <Text>{parseFloat(this.props.songDuration / 60).toFixed(2).split(".")[0]+':'+parseFloat(this.props.songDuration / 60).toFixed(2).split(".")[1]}</Text>
-                            <Text>{this.props.songPath}</Text>
+                            <Text>{this.props.songID}</Text>
                         </View>
                     </View>
                 </Modal>
