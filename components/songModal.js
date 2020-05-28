@@ -9,7 +9,7 @@ const DISABLED_OPACITY = 0.5;
 const FONT_SIZE = 18;
 const BUFFERING_STRING = '00:00';
 
-export default class Tracks extends Component {
+export default class SongModal extends Component {
     constructor(props) {
         super(props);
     }

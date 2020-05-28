@@ -1,13 +1,17 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { Dimensions, View, Text, StyleSheet, FlatList, TouchableOpacity, TouchableHighlight, Image } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
 import * as Permissions from 'expo-permissions';
 import { Audio } from 'expo-av';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import SongModal from '../components/songModal';
 
 //Variable used in many places
 const LOADING_STRING = 'Loading...';
+const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
+const BACKGROUND_COLOR = '#ccfffd';
+
 
 export default class Tracks extends Component {
     constructor() {
@@ -20,7 +24,8 @@ export default class Tracks extends Component {
         this.state = {
             songs: [],
             modalVisible: false,
-            songID: "",
+			songID: "",
+			source: '',
             playbackInstanceName: LOADING_STRING,
 			playbackInstancePosition: null,
 			playbackInstanceDuration: null,
@@ -79,6 +84,8 @@ export default class Tracks extends Component {
 		this.playbackInstance = sound;
 
 		this.updateScreenForLoading(false);
+
+		this.setState({source: this.state.songs[this.index].uri});
     }
     
     //Method used when making screen ready to play sound
@@ -278,7 +285,8 @@ export default class Tracks extends Component {
                 <SongModal closeModal={this.closeModal} 
                     IsVisible={this.state.modalVisible} 
                     songs={this.state.songs}
-                    songID={this.state.songID}
+					songID={this.state.songID}
+					source={this.state.source}
                     playbackInstanceName={this.state.playbackInstanceName}
                     isLoading={this.state.isLoading}
                     isBuffering={this.state.isBuffering}
@@ -294,7 +302,8 @@ export default class Tracks extends Component {
                 />
 
                 {/* List with scrollbar that shows all audio files */}
-                <FlatList 
+				<FlatList
+					style={this.state.isPlaying ? ({marginBottom: DEVICE_HEIGHT / 10}) : ({marginBottom: 0})} 
                     data={this.state.songs}
                     renderItem={({item}) => 
                         // Touchable item which toggles state and opens up modal
@@ -310,6 +319,79 @@ export default class Tracks extends Component {
                         </TouchableOpacity>
                     }
                 />
+
+				{this.state.isPlaying ? (
+					<View style={styles.miniModal}>
+						<Text style={styles.text}>
+						    {this.state.playbackInstanceName.split('.')[0]}
+					    </Text>
+						<View
+                            style={[
+                                styles.buttonsContainerBase,
+                                {
+                                    opacity: this.state.isLoading
+                                        ? DISABLED_OPACITY
+                                        : 1.0,
+                                },
+                            ]}
+                        >
+                            {/* Previous song button that jumps back to previous song by using props */}
+                            <TouchableHighlight
+                                underlayColor={BACKGROUND_COLOR}
+                                style={styles.wrapper}
+                                onPress={this.state.onBackPressed}
+                                disabled={this.state.isLoading}
+                            >
+                                <View>
+                                    <MaterialIcons
+                                        name="fast-rewind"
+                                        size={40}
+                                        color="darkcyan"
+                                    />
+                                </View>
+					        </TouchableHighlight>
+                            {/* Play/Pause button that toggles between playing and pausing song using props */}
+                            <TouchableHighlight
+                                underlayColor={BACKGROUND_COLOR}
+                                style={styles.wrapper}
+                                onPress={this.state.onPlayPausePressed}
+                                disabled={this.state.isLoading}
+                            >
+                                <View>
+                                    {this.state.isPlaying ? (
+                                        <MaterialIcons
+                                            name="pause"
+                                            size={40}
+                                            color="darkcyan"
+                                        />
+                                    ) : (
+                                        <MaterialIcons
+                                            name="play-arrow"
+                                            size={40}
+                                            color="darkcyan"
+                                        />
+                                    )}
+                                </View>
+                            </TouchableHighlight>
+                            {/* Next button used to go to next song by using props */}
+                            <TouchableHighlight
+                                underlayColor={BACKGROUND_COLOR}
+                                style={styles.wrapper}
+                                onPress={this.state.onForwardPressed}
+                                disabled={this.state.isLoading}
+                            >
+                                <View>
+                                    <MaterialIcons
+                                        name="fast-forward"
+                                        size={40}
+                                        color="darkcyan"
+                                    />
+                                </View>
+                            </TouchableHighlight>
+				        </View>
+					</View>
+				) : null}
+				
             </View>
         )
     }
@@ -323,7 +405,7 @@ const styles = StyleSheet.create({
     songView: {
         flexDirection: 'row',
         height: 60,
-        borderBottomWidth: 1,
+		borderBottomWidth: 1,
     },
     songText: {
         height: 50,
@@ -343,5 +425,13 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         margin: 5,
-    }
+	},
+	miniModal: {
+		position: 'absolute',
+		bottom: 0,
+		left: 0,
+		backgroundColor: 'green',
+		width: DEVICE_WIDTH,
+		height: DEVICE_HEIGHT / 10,
+	}
   });
