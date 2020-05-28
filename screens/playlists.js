@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dimensions, View, Text, StyleSheet, TouchableOpacity, AsyncStorage, FlatList, Image, Modal, TextInput } from 'react-native';
+import UserPlaylist from '../components/userPlaylist';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 
@@ -9,12 +10,16 @@ export default class Playlists extends React.Component {
 
         this.state= {
             allPlaylists: [],
-            modalVisible: false,
+            addPlaylistModal: false,
+            playlistModal: false,
+            playlistModalName: '',
             playlistName: '',
             newPlaylistError: '',
         }
     }
 
+    //Method that is executed when component renders which gets all playlists items in storage
+    // and if received data is not null sets them in state array
     async componentDidMount() {
         const Playlists = await AsyncStorage.getItem('playlists');
 
@@ -23,47 +28,77 @@ export default class Playlists extends React.Component {
         }  
     }
 
+    //Sets state array back to empty when component unmounts
     componentWillUnmount() {
         this.setState({allPlaylists: []});
     }
 
+    //Method used to create new playists
     createPlaylist = async () => {
+        //First it checks user input and it cannot be empty
         if (this.state.playlistName !== '') {
+            //Saves user input in variable
             const playlistsToSave = { 'name': this.state.playlistName}
+            //Saves storage data in varable (playlists in storage)
             const existingProducts = await AsyncStorage.getItem('playlists')
 
+            //If data erceived from storage is not null and it is the same as user input --->
             if (existingProducts !== null && existingProducts.includes(this.state.playlistName)) {
+                // ---> state updates with this string which is shown in modal
                 this.setState({newPlaylistError: 'Name is already taken'})
             } else {
 
+                //If everything is ok then we parse starage data and set it into variable
                 let newPlaylists = JSON.parse(existingProducts);
+                //If storage data is empty then set it as new empty array
                 if( !newPlaylists ){
                     newPlaylists = []
                 }
 
+                //Push new playlist name into the array
                 newPlaylists.push( playlistsToSave )
 
+                //Saving data in storage
                 await AsyncStorage.setItem('playlists', JSON.stringify(newPlaylists))
                     .then(() => {
+                        //Re-renderig screen to show changes
                         this.props.navigation.replace('Playlists');
                     })
                     .catch((e) => {
+                        //If there is errorrs then log them
                         console.log(e);
                     })
 
             }
+            //If user input empty, then sets state to this string which is shown in modal
         } else {
             this.setState({newPlaylistError: 'Please enter a name for your playist'})
         }
         
     }
 
+    //Method used to open modal by updating state
+    openPlaylist(playlistName) {
+        this.setState({playlistModal : true, playlistModalName: playlistName})
+    }
+
+    //Method used to close modal by updating state
+    closePlaylist = () => {
+        this.setState({playlistModal: false, playlistModalName: ''});
+    }
+
     render() {
         return (
             <View style={styles.container}>
+
+                <UserPlaylist 
+                    playlistModal={this.state.playlistModal}
+                    playlistModalName={this.state.playlistModalName}
+                    closeModal={this.closePlaylist}
+                />
     
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.playlistButton} onPress={() => {this.setState({modalVisible: true})}}>
+                    <TouchableOpacity style={styles.playlistButton} onPress={() => {this.setState({addPlaylistModal: true})}}>
                         <Text style={styles.playlistBtnText}>Create playlist</Text>
                     </TouchableOpacity>
                 </View>
@@ -73,7 +108,7 @@ export default class Playlists extends React.Component {
                     data={this.state.allPlaylists}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({item}) =>
-                        <TouchableOpacity  key={Math.random()} style={styles.playlistContainer}>
+                        <TouchableOpacity  key={Math.random()} style={styles.playlistContainer} onPress={() => {this.openPlaylist(item.name)}}>
                             <Image style={styles.playlistImage} source={require('../assets/music-icon.png')} />
                             <Text style={styles.playlistText}>{item.name}</Text>
                         </TouchableOpacity>
@@ -84,7 +119,7 @@ export default class Playlists extends React.Component {
                 <Modal
                     style={styles.playlistModal}
                     animationType='slide'
-                    visible={this.state.modalVisible}
+                    visible={this.state.addPlaylistModal}
                     transparent={true}
                 >
                     <View style={styles.modalBackContainer}>
@@ -103,7 +138,7 @@ export default class Playlists extends React.Component {
                         </View>
 
                         <View style={styles.playlistButtonsContainer}>
-                            <TouchableOpacity style={styles.buttonCancel} onPress={() => {this.setState({modalVisible: false})}}>
+                            <TouchableOpacity style={styles.buttonCancel} onPress={() => {this.setState({addPlaylistModal: false})}}>
                                 <Text style={styles.buttonText}>Cancel</Text>
                             </TouchableOpacity>
 
