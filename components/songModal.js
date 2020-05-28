@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { Dimensions, View, Text, StyleSheet, Image, Modal, TouchableHighlight } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import Slider from 'react-native-slider';
+import AddToPlaylist from './addToPlaylist';
 
 const { width: DEVICE_WIDTH, height: DEVICE_HEIGHT } = Dimensions.get('window');
 const BACKGROUND_COLOR = '#ccfffd';
@@ -12,6 +13,17 @@ const BUFFERING_STRING = '00:00';
 export default class SongModal extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            ModalVisible: false
+        }
+    }
+
+    //Method used to update state and close modal
+    closeModal = () => {
+        this.setState({
+            ModalVisible: false,
+        });
     }
 
     render() {
@@ -21,6 +33,17 @@ export default class SongModal extends Component {
 
         return (
             <View>
+
+                {/* Calling component which has a modal where user can add current song to one of his playlists */}
+                <AddToPlaylist 
+                    ModalVisible={this.state.ModalVisible}
+                    closeModal={this.closeModal}
+                    songID={this.props.songID}
+                    songName={this.props.playbackInstanceName}
+                    songPath={this.props.source}
+                    songDuration={this.props.getDuration}
+                />
+
                 <Modal 
                     animationType= 'slide'
                     visible={modalVisible}
@@ -36,6 +59,7 @@ export default class SongModal extends Component {
                             />
 
                             <MaterialIcons 
+                                onPress={() => this.setState({ModalVisible: true})}
                                 name="playlist-add"
                                 size={34}
                                 
