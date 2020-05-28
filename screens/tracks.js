@@ -312,7 +312,7 @@ export default class Tracks extends Component {
                                 <Text>{item.filename.split(".")[0].split(" - ")[0]}</Text>
                             </View>
                             
-                            <Text style={styles.songDuration}>{parseFloat(item.duration / 60).toFixed(2).split(".")[0]}:{parseFloat(item.duration / 60).toFixed(2).split(".")[1]}</Text>
+                            <Text style={styles.songDuration}>{Math.floor(item.duration / 60)}:{Math.floor(item.duration % 60)}</Text>
                         </TouchableOpacity>
                     }
                 />	
