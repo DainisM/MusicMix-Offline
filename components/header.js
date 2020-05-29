@@ -18,14 +18,7 @@ export default function Header({navigation}) {
                         name='search'
                         size={36}
                         onPress={() => navigation.navigate('Search')}
-                    />
-
-                    <MaterialIcons
-                        style={styles.headerButton}  
-                        name='settings'
-                        size={36}
-                        onPress={() => navigation.navigate('Settings')}
-                    />                
+                    />               
 
                 </View>
 

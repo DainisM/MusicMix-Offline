@@ -15,10 +15,6 @@ export default function HomeNavigation({navigation}) {
                 <Text style={styles.navText}>Tracks</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.navLink} onPress={() => navigation.replace('Artists')}>
-                <Text style={styles.navText}>Artists</Text>
-            </TouchableOpacity>
-
         </View>
     );
 }
