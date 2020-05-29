@@ -85,6 +85,7 @@ export default class Playlists extends React.Component {
     //Method used to close modal by updating state
     closePlaylist = () => {
         this.setState({playlistModal: false, playlistModalName: ''});
+        this.props.navigation.replace('Playlists');
     }
 
     render() {
@@ -95,6 +96,7 @@ export default class Playlists extends React.Component {
                     playlistModal={this.state.playlistModal}
                     playlistModalName={this.state.playlistModalName}
                     closeModal={this.closePlaylist}
+                    allPlaylists={this.state.allPlaylists}
                 />
     
                 <View style={styles.buttonContainer}>

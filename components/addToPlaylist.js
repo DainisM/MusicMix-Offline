@@ -10,7 +10,9 @@ export default class AddToPlaylist extends Component {
         this.state = {
             allPlaylists: [],
             success: false,
-            successMessage: 'Song added to playlist'
+            error: false,
+            successMessage: 'Song added to playlist',
+            errorMessage: 'Song already exists in playlist'
         }
     }
 
@@ -25,6 +27,8 @@ export default class AddToPlaylist extends Component {
 
     //Method used to save song to playlist
     saveToPlaylist = async (playlist) => {
+
+
         //Variable that holds current song metadata
         const songToSave = {'ID': this.props.songID, 'name': this.props.songName, 'path': this.props.songPath, 'duration': this.props.songDuration}
         //Get playlist that user wants to save song to
@@ -32,25 +36,39 @@ export default class AddToPlaylist extends Component {
 
         //Check if playlist has songs in it
         let newSong = JSON.parse(existingSongs);
+
         //If playlist is empty make new empty array
         if (!newSong) {
             newSong = []
         }
 
-        //Push new song into the playlist array
-        newSong.push(songToSave);
+        //Checks if there already is song with this ID
+        if ( newSong !== [] && newSong.find(item => item.ID === this.props.songID)) {
+            //If it exists then sets error state to true (to show error message)
+            this.setState({error: true});
 
-        //Save updated array localy
-        await AsyncStorage.setItem(playlist, JSON.stringify(newSong))
-            .then(() => {
-                //Setting success state to true
-                this.setState({success: true})
-                //Setting success state back to false
-                setTimeout(() => {
-                    this.setState({success: false})
-                }, 1000)
-            })
-            .catch((e) => alert('Something went wrong!'));
+            //Timeout method to set error state back after 1 second
+            setTimeout(() => {
+                this.setState({error: false})
+            }, 1000)
+        } else {
+
+            //Push new song into the playlist array
+            newSong.push(songToSave);
+
+            //Save updated array localy
+            await AsyncStorage.setItem(playlist, JSON.stringify(newSong))
+                .then(() => {
+                    //Setting success state to true
+                    this.setState({success: true})
+                    //Setting success state back to false
+                    setTimeout(() => {
+                        this.setState({success: false})
+                    }, 1000)
+                })
+                .catch((e) => alert('Something went wrong!'));
+        }
+
     }
 
     render() {
@@ -87,6 +105,11 @@ export default class AddToPlaylist extends Component {
                         {/* Text that will be shown when success in state is true */}
                         {this.state.success ? (
                             <Text style={styles.successText}>{this.state.successMessage}</Text>
+                        ): (null)}
+
+                        {/* Text that will show when error state is true */}
+                        {this.state.error ? (
+                            <Text style={styles.errorText}>{this.state.errorMessage}</Text>
                         ): (null)}
                         
 
@@ -162,6 +185,10 @@ const styles = StyleSheet.create({
     },
     successText: {
         color: 'green',
+        alignSelf: 'center',
+    },
+    errorText: {
+        color: 'red',
         alignSelf: 'center',
     }
   });

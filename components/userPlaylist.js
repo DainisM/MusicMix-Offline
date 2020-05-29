@@ -22,6 +22,16 @@ export default class AddToPlaylist extends Component {
 
     }
 
+    deletePlaylist = async () => {
+
+        let filteredArray = this.props.allPlaylists.filter(item => item.name !== this.props.playlistModalName)
+
+        await AsyncStorage.setItem('playlists', JSON.stringify(filteredArray))
+
+        this.props.closeModal();
+
+    }
+
     render() {
         //Variable that is given props value
         let modalVisible = this.props.playlistModal;
@@ -45,7 +55,8 @@ export default class AddToPlaylist extends Component {
                             <Text style={styles.playlistName}>{this.props.playlistModalName}</Text>
 
                             <MaterialIcons 
-                            name="edit"
+                            onPress={this.deletePlaylist}
+                            name="delete"
                             size={28}
                         />
                         </View>
@@ -59,7 +70,7 @@ export default class AddToPlaylist extends Component {
                         keyExtractor={(item, index) => index.toString()}
                         renderItem={({item}) => 
                             // Touchable item which toggles state and opens up modal
-                            <TouchableOpacity style={styles.songView} 
+                            <TouchableOpacity style={styles.songView} key={item.index}
                             // onPress={() => {this.openModal(item.id)}}
                             >
                                 <Image style={styles.tracksImages} source={require('../assets/audio_icon.png')} />
