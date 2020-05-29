@@ -58,12 +58,15 @@ export default class SongModal extends Component {
                                 onPress={this.props.closeModal}
                             />
 
-                            <MaterialIcons 
+                            {!this.props.fromPlaylist ? (
+                                <MaterialIcons 
                                 onPress={() => this.setState({ModalVisible: true})}
                                 name="playlist-add"
                                 size={34}
                                 
                             />
+                            ): null}
+                            
                         </View>
 
                         
