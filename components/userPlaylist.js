@@ -49,6 +49,8 @@ export default class AddToPlaylist extends Component {
         let filteredArray = this.props.allPlaylists.filter(item => item.name !== this.props.playlistModalName)
         //Savig new array instead of old
         await AsyncStorage.setItem('playlists', JSON.stringify(filteredArray))
+
+        await AsyncStorage.removeItem(this.props.playlistModalName);
         //Closing Modal
         this.props.closeModal();
     }
