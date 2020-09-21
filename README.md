@@ -6,6 +6,7 @@ This is an offline mobile application that finds all songs on the user's device 
 I have a "Home" screen which is also used to display all songs, a screen to search for songs and one to create or delete playlists
 
 _Here is a home screen screenshot:_
+<br/>
 <img src="https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/HomeScreen.png" width="300">
 
 _Playlist screen screenshot:_
