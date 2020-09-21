@@ -7,12 +7,12 @@ I have a "Home" screen which is also used to display all songs, a screen to sear
 
 _Here is a home screen screenshot:_
 
-![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/HomeScreen.png | width=300)
+![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/HomeScreen.png){:height="50%" width="50%"}
 
 _Playlist screen screenshot:_
 
-![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/PlaylistScreen_1.png | width=300)
+![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/PlaylistScreen_1.png)
 
 _Listen to song screenshot:_
 
-![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/TrackScreen_1.png | width=300)
+![](https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/TrackScreen_1.png)
