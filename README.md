@@ -8,9 +8,15 @@ I have a "Home" screen which is also used to display all songs, a screen to sear
 _Here is a home screen screenshot:_
 <br/>
 <img src="https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/HomeScreen.png" width="300">
+<br/>
+<br/>
 
 _Playlist screen screenshot:_
+<br/>
 <img src="https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/PlaylistScreen_1.png" width="300">
+<br/>
+<br/>
 
 _Listen to song screenshot:_
+<br/>
 <img src="https://github.com/DainisM/Screenshots/blob/master/MusicMix-Offline/TrackScreen_1.png" width="300">
